@@ -4,3 +4,4 @@ LICENSE
 *.env
 *.gitlab
 *.github
+!example.env

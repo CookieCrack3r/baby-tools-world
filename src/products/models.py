@@ -14,7 +14,8 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the category name as its string representation."""
         return self.name
 
     class Meta:
@@ -29,22 +30,25 @@ class Product(models.Model):
     image = models.ImageField(upload_to="imgs/products/", null=True, blank=True)
     name = models.CharField(max_length=80, blank=False, null=False)
     price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))])
+    tags = models.ManyToManyField("Tag", blank=True, related_name="products")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # NEW helper properties
     @property
-    def average_rating(self):
+    def average_rating(self) -> float:
+        """Return the mean rating across all related comments, or 0 if there are none."""
         from django.db.models import Avg
 
         return self.comments.aggregate(a=Avg("rating"))["a"] or 0
 
     @property
-    def rating_count(self):
+    def rating_count(self) -> int:
+        """Return the number of comments (ratings) attached to this product."""
         return self.comments.count()
 
     def __str__(self) -> str:
+        """Return the product name as its string representation."""
         return self.name
 
 
@@ -69,6 +73,21 @@ class Comment(models.Model):
         ]
         indexes = [models.Index(fields=["product", "created_at"])]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the commenter's name and star rating as the string representation."""
         who = self.user.username if self.user else (self.guest_name or "Guest")
         return f"{who} - {self.rating}★"
+
+
+# Tag model
+class Tag(models.Model):
+    name = models.CharField(max_length=30, unique=True, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self) -> str:
+        """Return the tag name as its string representation."""
+        return self.name

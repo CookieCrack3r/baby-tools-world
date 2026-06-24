@@ -51,6 +51,17 @@
               <span class="text-muted" title="No ratings yet">No ratings</span>
             {% endif %}
           </div>
+                    <!-- (3) Product Tags -->
+          <div class="col-auto d-none d-lg-block">
+
+            {% for tag in product.tags.all %}
+              <span class="badge bg-secondary">{{ tag.name }}</span>
+            {% empty %}
+              <span class="text-muted fst-italic">No tags available</span>
+            {% endfor %}
+
+          </div>
+
           <p class="card-text">
             {{product.description | truncatechars:80}}
           </p>
