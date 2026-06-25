@@ -6,7 +6,7 @@ ARG _WORKDIR=/app
 WORKDIR ${_WORKDIR}
 
 # Default port for the app to start with
-ENV APP_PORT=8000
+ENV APP_PORT=8003
 
 # Copy all non-ignored files to image
 COPY . ${_WORKDIR}

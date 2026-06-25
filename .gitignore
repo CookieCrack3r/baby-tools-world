@@ -40,3 +40,12 @@ node_modules/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Backups / archives / large artifacts (never commit these)
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.bak
+*.dump
+martin-friedrich@*

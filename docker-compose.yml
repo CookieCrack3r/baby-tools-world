@@ -14,7 +14,7 @@ services:
     container_name: baby-tools-world
     ports:
       # host:container — the app listens on APP_PORT inside the container (see Dockerfile)
-      - "8000:8000"
+      - "8003:8003"
     # Without a .env the app uses its built-in defaults: APP_PORT=8000 (Dockerfile),
     # DEBUG=true and ALLOWED_HOSTS="localhost, 127.0.0.1, 0.0.0.0" (settings.py).
     env_file:
