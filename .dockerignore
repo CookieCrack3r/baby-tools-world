@@ -1,6 +1,49 @@
+# Local virtual environment (~94 MB) — never copy into the image
+baby-tools-env/
 *venv
+.venv
+
+# Git metadata (~21 MB)
+.git
+.gitattributes
+.gitignore
+
+# Python caches / bytecode
+__pycache__/
+*.py[cod]
+
+# Local dev database (migrations recreate the schema on startup)
+db.sqlite3
+db.sqlite3-journal
+
+# Collected static (entrypoint runs collectstatic anyway)
+staticfiles/
+
+# Secrets / env files — injected at runtime via --env-file, must not be baked in
+**/*.env
+
+# CI / tooling / docs not needed at runtime
+.github
+.gitlab
+.gitlab-ci.yml
+.markdownlint-cli2.yaml
+docs/
 README.md
 LICENSE
-*.env
-*.gitlab
-*.github
+
+# Test / coverage artifacts
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+
+# Node
+node_modules/
+package-lock.json
+
+# Build artifacts — image exports must never be copied into the build context
+*.tar
+*.tar.gz
+*.tgz
+# Stray file from a mistyped scp target (safe to delete)
+martin-friedrich@*

@@ -1,0 +1,32 @@
+# Docker Compose setup for the "Baby Tools World" Django app.
+#
+# Quickstart:
+#   docker compose up --build      ->  open http://localhost:8000
+#   docker compose down            ->  stop and remove the container
+#
+# The container runs entrypoint.sh on start, which collects static files,
+# applies database migrations, and launches the Django development server.
+
+services:
+  web:
+    build: .
+    image: baby-tools-world:local
+    container_name: baby-tools-world
+    ports:
+      # host:container — the app listens on APP_PORT inside the container (see Dockerfile)
+      - "8003:8003"
+    # Without a .env the app uses its built-in defaults: APP_PORT=8000 (Dockerfile),
+    # DEBUG=true and ALLOWED_HOSTS="localhost, 127.0.0.1, 0.0.0.0" (settings.py).
+    env_file:
+      # Optional: drop a .env next to this file (see example.env) to override those
+      # defaults. "required: false" keeps compose working when no .env exists.
+      # (Needs Docker Compose v2.24+; remove the "required" key on older versions.)
+      - path: .env
+        required: false
+    # The container is ephemeral by default: the SQLite database lives inside it
+    # and is recreated by the migrations on every fresh start. To persist data
+    # across `docker compose down`, create the database file once on the host
+    # (e.g. via the Quickstart in the README) and then uncomment the mount below.
+    # volumes:
+    #   - ./src/db.sqlite3:/app/src/db.sqlite3
+    restart: unless-stopped

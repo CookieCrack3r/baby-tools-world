@@ -3,9 +3,6 @@
 This repository contains the source code of the 'Baby Tools World' which is a simple full stack shop application written in Python using Django 6.
 The project was developed for educational purposes only and therefore has no claim to feature completeness, or only minimal claims regarding application security, user experience, or design.
 
-> [!NOTE]
-> This project assumes you already know the python programming language
-
 ## Prerequisites
 
 In order to seamlessly interact with the repository and the software it contains you need to following tools preinstalled:
@@ -19,28 +16,32 @@ In order to seamlessly interact with the repository and the software it contains
 In order to quickly get started with the project follow these steps:
 
 1. clone the repository
-1. nagivate to the repository
-1. (optional) create a virtual environment with `python -m venv my-venv`
-    1. activate the virtual environment:
+2. nagivate to the repository
+3. create a virtual environment with `python -m venv my-venv`
+    3.1. activate the virtual environment:
         - on Windows run: `my-venv/Scripts/activate`
         - on MacOS/Linux run: `source my-venv/bin/activate`
-1. install the project dependencies with `pip install -r requirements.txt`
-1. configure required application environment variables
-    - `cp example.env .env`
-1. go to the `src` directory via `cd src`
-1. prepare the database (create and apply migrations)
-    1. `python manage.py makemigrations`
-    1. `python manage.py migrate`
-1. start the application with `python manage.py runserver`
-1. verify the application is running by visiting `localhost:8000`
-1. (optional) create a superuser by running: `python manage.py createsuperuser`
+4. install the project dependencies with `pip install -r requirements.txt`
+5. configure required application environment variables
+        - `cp example.env .env`
+6. go to the `src` directory via `cd src`
+7. prepare the database (create and apply migrations):
+        - `python manage.py makemigrations`
+        - `python manage.py migrate`
+8. start the application with `python manage.py runserver`
+9. verify the application is running by visiting `localhost:8000`
+10. (optional) create a superuser by running: `python manage.py createsuperuser`
 
 ## Project Structure
 
 - `.gitlab`: GitLab specific project files
 - `.github`: GitHub specific project files
 - `src`: application source code, containing the django project, apps, and other files
+- `docs`: project documentation (this README, plus testing and WSGI guides)
 - `requirements.txt`: the project dependencies
+- `Dockerfile`: build instructions for the container image
+- `entrypoint.sh`: container startup script (collectstatic, migrate, runserver)
+- `docker-compose.yml`: single-command container setup (build, port mapping, env file)
 
 ### Apps Overview
 
@@ -117,7 +118,7 @@ To run the tests with the `django testrunner` you can use the following command:
 
 - `python manage.py test`, you need to run this in the folder where `manage.py` lives -> `src`
 
-For more information about testing, refer to the testing documentation in this repository, see [testing documentation](./docs/testing.md)
+For more information about testing, refer to the testing documentation in this repository, see [testing documentation](./testing.md)
 
 ### Running with a WSGI Server
 
@@ -135,7 +136,7 @@ the application can handle HTTP requests efficiently and reliably in a scalable 
 > See the following [quote](https://docs.gunicorn.org/en/stable/index.html) from the official gunicorn website:
 >> Gunicorn ‘Green Unicorn’ is a Python WSGI HTTP Server for UNIX.
 
-For more information about WSGI and its configuration, see the [wsgi documentation](./docs/wsgi.md).
+For more information about WSGI and its configuration, see the [wsgi documentation](./wsgi.md).
 
 ### Seeding the application with data
 
@@ -156,6 +157,37 @@ This section should give a brief overview about the containerization of the djan
 > [!NOTE]
 > This guide assumes you are using the docker engine, docker desktop, or anything similar.
 > For other tools that are compliant with the OCI spec the commands will be slightly different, but more or less the same.
+
+#### Quickstart with Docker Compose
+
+The fastest way to get a running container is via the provided [`docker-compose.yml`](../docker-compose.yml).
+It builds the image, maps the port, and wires up the environment for you, so you do not have to
+remember the individual `docker build` and `docker run` commands.
+
+From the repository root run:
+
+```bash
+# build the image (if needed) and start the app in the foreground
+docker compose up --build
+
+# ...or run it detached in the background
+docker compose up --build -d
+```
+
+The application is then available at `localhost:8000`.
+
+> [!TIP]
+> Configuration is optional — the container starts with the defaults from `src/btw_app/settings.py`.
+> To override them, copy the example file (`cp example.env .env`) and adjust the values; the compose
+> setup picks up a `.env` next to `docker-compose.yml` automatically.
+
+To stop and remove the container again, run:
+
+```bash
+docker compose down
+```
+
+The remaining subsections describe how to achieve the same result manually with plain `docker` commands.
 
 #### Build an image
 

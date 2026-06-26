@@ -1,8 +1,6 @@
 asgiref==3.11.1
 Django==6.0.2
 gunicorn==25.0.1
-# uncomment the following line if
-# you want to use waitress over gunicorn
 # waitress==3.0.2
 packaging==26.0
 pillow==12.1.0
